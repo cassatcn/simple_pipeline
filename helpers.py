@@ -1,10 +1,7 @@
-# helpers.py
-
-import textwrap, re
+import textwrap, re, os
 from typing import Any, Iterable, List, Optional, Sequence, Union
 from contextlib import contextmanager
 from types import SimpleNamespace
-import os
 from sshtunnel import SSHTunnelForwarder
 import paramiko
 import psycopg2
@@ -67,29 +64,6 @@ def open_remote_session(
             if ssh_client:
                 ssh_client.close()
 
-@contextmanager
-def pg_conn_via_ssh(
-    ssh_host: str,
-    ssh_user: str,
-    ssh_password: str,
-    db_name: str,
-    db_user: str,
-    db_pass: str,
-    ssh_port: int = 22,
-    db_port: int = 5432,
-):
-    with open_remote_session(
-        ssh_host=ssh_host,
-        ssh_user=ssh_user,
-        ssh_password=ssh_password,
-        db_name=db_name,
-        db_user=db_user,
-        db_pass=db_pass,
-        ssh_port=ssh_port,
-        db_port=db_port,
-        want_sftp=False,
-    ) as session:
-        yield session.conn
 
 def run_query(
     conn,
@@ -170,12 +144,15 @@ def run_query(
 
         return rows
 
+
 def _first_line(sql: str) -> str:
     return textwrap.shorten(sql.strip().splitlines()[0], width=60, placeholder="…")
+
 
 def _to_df(rows: List[tuple], columns: List[str]):
     import pandas as pd
     return pd.DataFrame.from_records(rows, columns=columns)
+
 
 def execute_sql_text(conn, sql_text: str):
     cleaned = _strip_sql_comments(sql_text)
@@ -184,6 +161,7 @@ def execute_sql_text(conn, sql_text: str):
         for i, stmt in enumerate(stmts, 1):
             cur.execute(stmt)
     conn.commit()
+
 
 def _strip_sql_comments(s: str) -> str:
     s = re.sub(r'/\*.*?\*/', '', s, flags=re.S)
