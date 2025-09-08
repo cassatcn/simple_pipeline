@@ -13,8 +13,8 @@ param(
   [string]$User = "moxy",
   [string]$RemoteHost = "10.10.219.8",
   [string]$RemoteBase = "~/simple_pipeline",
-  [string]$LocalUserZip = "$env:USERPROFILE\Downloads\user_data.zip",  # Assumes in downloads folder
-  [string]$LocalPurchaseZip = "$env:USERPROFILE\Downloads\purchase_data.zip",  # Assumes in downloads folder
+  [string]$LocalUserZip = $(Join-Path $PSScriptRoot 'user_data.zip'),
+  [string]$LocalPurchaseZip = $(Join-Path $PSScriptRoot 'purchase_data.zip'),
   [string]$DbName = "ecommerce",
   [string]$DbOwner = "appuser",
   [switch]$VerboseScp
