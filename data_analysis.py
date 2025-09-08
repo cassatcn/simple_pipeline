@@ -15,8 +15,6 @@ with open_remote_session(
     want_sftp=False,
 ) as session:
     conn = session.conn
-    run_query(conn, "SELECT COUNT(*) FROM users;", title="users")
-    run_query(conn, "SELECT COUNT(*) FROM purchases;", title="purchases")
 
     ## User Type Counts with Bar Chart visual
     df_users = run_query(conn, """
@@ -102,7 +100,4 @@ with open_remote_session(
     plt.title("Percentage of device types")
     plt.savefig("charts/pie_devicetype_pct")
     plt.close()
-    
-
-
     
