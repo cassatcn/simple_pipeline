@@ -87,7 +87,6 @@ Run with defaults:
 
 ```powershell
 # Defaults: user=moxy, host=10.10.219.8, remote base=~/simple_pipeline
-# Expects ZIPs in the repo root: .\user_data.zip and .\purchase_data.zip
 .\data_db_setup.ps1
 ```
 
@@ -123,20 +122,11 @@ python .\import_data.py `
 About `transform_data.sql`:
 - Inserts from `raw.*` into `public.users` and `public.purchases` with type casts, null handling, and computed `total_price`
 
-The 5 charts to produce (saved as PNG in `./charts/`):
-- Revenue by category (bar)
-- Monthly revenue 2023–2024 (line)
-- User types (%) (pie)
-- Total spending distribution (histogram)
-- One of your choice (e.g., device types pie)
-
 ## 4) Quick checks — `db_conn.py`
 
 Runs a few SELECTs and prints compact previews. Uses the same SSH/DB defaults (or your overrides).
 
 ```powershell
-# If using password auth
-$env:SSH_PASSWORD = "your-ssh-password"
 python .\db_conn.py
 ```
 
@@ -157,14 +147,6 @@ Small helpers used by the scripts:
 	- `charts/pie_devicetype_pct.png`
 - Findings: `FINDINGS.md`
 - Model summary: `MODEL_RESULTS.md`
-
-## “Done” checklist
-
-- PostgreSQL has `users` + `purchases` loaded with realistic row counts
-- `data_analysis.py` produces required answers and 5 charts in `./charts/`
-- `ml_model.py` trains one working model and logs results to `MODEL_RESULTS.md`
-- Docs updated: setup, findings, model results, next ideas
-- Re-runs cleanly from a fresh clone
 
 ## Defaults and notes
 
