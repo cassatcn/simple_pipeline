@@ -61,3 +61,6 @@ This graph shows the importance of each feature we used in the model. Purchase c
 # Summary
 Overall, user type doesn't seem to have a big impact on predicting a user's spending. Purchase amount has a large impact. The relationship was not captured very well for high spenders with these predictors, loading in more of the features is reccommended. Another model that captures non linear relationships like random forest is also worth trying. 
 
+
+*todo: comeback after thursday to improve preformance 
+
