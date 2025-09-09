@@ -10,6 +10,10 @@ except Exception:
 import os
 from helpers import open_remote_session, run_query
 
+# lets us use .env file for secrets
+from dotenv import load_dotenv
+load_dotenv()
+
 
 with open_remote_session(
     ssh_host="10.10.219.8",

@@ -4,3 +4,6 @@ psycopg2
 cryptography
 pandas
 matplotlib
+sklearn
+python-dotenv
+seaborn
