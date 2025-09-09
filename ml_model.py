@@ -1,10 +1,4 @@
-# simple regression model
-
-# get table of total purchases per email 
-
-# option 1: predict total spend based on user type (maybe + last device)
-# option 2: predict total spend in each category based on number of users in that category
-# option 3: predict number of purchases per user based on user types (+ number of purchases, last device)
+# simple regression model & gradient boost model to predict user spend
 
 import os
 import pandas as pd
@@ -43,41 +37,37 @@ with open_remote_session(
     df_users.head()
 
 
-    # plort scatter of total spend vs user type
-    # import seaborn as sns
-    # sns.scatterplot(data=df_users, x='email', y='total_spent', hue='user_type')
-    # plt.xlabel('Email')
-    # plt.ylabel('Total Spent')
-    # plt.title('Total Spent by Email and User Type')
-    #plt.show()
-
     print(len(df_users))
-
+    
+    # ensure types
     df_users["total_spent"] = pd.to_numeric(df_users["total_spent"], errors="coerce")
     df_users["purchase_count"] = pd.to_numeric(df_users["purchase_count"], errors="coerce")
 
     # drop non feature rows
     df_users = df_users.drop(columns=["email", "first_name", "last_name"])
 
-    # Separate features (X) and target (y)
+    # separate features (X) and target (y)
     X = df_users.drop(columns=["total_spent"])
     y = df_users["total_spent"]
 
-    # One-hot encode categorical variables (user_type, last_device)
+    # one-hot encode categorical variables (user_type, last_device)
     X = pd.get_dummies(X, drop_first=True)
 
-    print("Feature columns after encoding:\n", X.head())
+    print("Feature columns after encoding:\n", X.head()) # check features
 
+    # training and test splits
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.3, random_state=42
     )   
 
+    # train lienar regression model
     model = LinearRegression()
     model.fit(X_train, y_train)
 
-
+    # predict on test set
     y_pred = model.predict(X_test)
 
+    # evaluate
     mse = mean_squared_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
 
@@ -85,7 +75,7 @@ with open_remote_session(
     print("Mean Squared Error:", mse)
     print("R² Score:", r2)
 
-    # Actual vs Predicted
+    # plot Actual vs Predicted
     plt.figure(figsize=(6,6))
     sns.scatterplot(x=y_test, y=y_pred)
     plt.plot([y_test.min(), y_test.max()],
@@ -97,7 +87,7 @@ with open_remote_session(
     plt.savefig("charts/ml_actual_vs_predicted.png")
     plt.show()
 
-    # Feature importance (coefficients)
+    # plot Feature importance (coefficients)
     coef_df = pd.DataFrame({
         "Feature": X.columns,
         "Coefficient": model.coef_
@@ -110,14 +100,14 @@ with open_remote_session(
     plt.show()
 
 
-    # Train Gradient Boosting Regressor  
+    # train Gradient Boosting Regressor  
     gbr = GradientBoostingRegressor(random_state=42)          
     gbr.fit(X_train, y_train)                                 
 
-    # Predict on test set  
+    # predict on test set  
     y_pred_gbr = gbr.predict(X_test)                          
 
-    # Evaluate  
+    # evaluate  
     mse_gbr = mean_squared_error(y_test, y_pred_gbr)         
     r2_gbr = r2_score(y_test, y_pred_gbr)                     
     print("\nGradient Boosting Regressor")                    
@@ -125,7 +115,7 @@ with open_remote_session(
     print(f"MSE: {mse_gbr:.3f}")                              
     print(f"R^2: {r2_gbr:.3f}")     
 
-    # Actual vs Predicted (GBR)  
+    # plot actual vs Predicted (GBR)  
     plt.figure()                                              
     plt.scatter(y_test, y_pred_gbr, alpha=0.7)                
     y_min, y_max = float(np.min(y_test)), float(np.max(y_test))  
@@ -136,7 +126,7 @@ with open_remote_session(
     plt.savefig("charts/ml_gbr_actual_predicted.png")  
     plt.show()                                                
 
-    # Residuals vs Predicted (GBR)  
+    # plot Residuals vs Predicted (GBR)  
     res_gbr = y_test - y_pred_gbr                             
     plt.figure()                                              
     plt.scatter(y_pred_gbr, res_gbr, alpha=0.7)               
@@ -147,7 +137,7 @@ with open_remote_session(
     plt.savefig("charts/ml_gbr_residual_predicted.png")
     plt.show()                                                
 
-    # Feature importance (GBR)  
+    # plot feature importance (GBR)  
     fi = pd.Series(gbr.feature_importances_, index=X_train.columns)  
     fi = fi.sort_values(ascending=True)                               
     plt.figure()                                                      
