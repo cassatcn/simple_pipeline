@@ -4,6 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from helpers import open_remote_session, run_query
 
+# lets us use .env file for secrets
+from dotenv import load_dotenv
+load_dotenv()
+
 # %% quick test query
 with open_remote_session(
     ssh_host="10.10.219.8",
@@ -28,7 +32,7 @@ with open_remote_session(
                             SELECT first_name, last_name, total_spent
                             FROM users
                             ORDER BY total_spent DESC
-                            LIMIT 10; """, as_df=True, limit = None)
+                            LIMIT 20; """, as_df=True, limit = None)
     print(df_spenders)
 
     ## Device/browser distribution
@@ -99,5 +103,5 @@ with open_remote_session(
     plt.pie(df_device['count'], labels = df_device['last_device'])
     plt.title("Percentage of device types")
     plt.savefig("charts/pie_devicetype_pct")
-    plt.close()
+    plt.show()
     
