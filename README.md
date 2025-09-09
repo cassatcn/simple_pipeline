@@ -145,8 +145,14 @@ Small helpers used by the scripts:
 	- `charts/pie_usertype_pct.png`
 	- `charts/hist_total_spending.png`
 	- `charts/pie_devicetype_pct.png`
-- Findings: `FINDINGS.md`
-- Model summary: `MODEL_RESULTS.md`
+	- `charts\ml_actual_vs_predicted.png`
+	- `charts\ml_feature_importance.png`
+	- `charts\ml_gbr_actual_predicted.png`
+	- `charts\ml_gbr_residual_predicted.png`
+	- `charts\ml_gbr_feature_importance.png`
+
+- Findings: `FINDINGS.md`, `MODEL_RESULTS.md`
+
 
 ## Defaults and notes
 
