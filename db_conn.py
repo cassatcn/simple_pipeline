@@ -1,5 +1,3 @@
-# db_conn.py
-
 import warnings
 try:
     from cryptography.utils import CryptographyDeprecationWarning
@@ -9,6 +7,10 @@ except Exception:
 
 import os
 from helpers import open_remote_session, run_query
+
+# lets us use .env file for secrets
+from dotenv import load_dotenv
+load_dotenv()
 
 
 with open_remote_session(
@@ -23,8 +25,6 @@ with open_remote_session(
     conn = session.conn
 
     # Example queries
-    run_query(conn, "SELECT COUNT(*) FROM raw.users_raw;", title="raw.users_raw")
-    run_query(conn, "SELECT COUNT(*) FROM raw.purchases_raw;", title="raw.purchases_raw")
     run_query(conn, "SELECT COUNT(*) FROM users;", title="users")
     run_query(conn, "SELECT COUNT(*) FROM purchases;", title="purchases")
 
